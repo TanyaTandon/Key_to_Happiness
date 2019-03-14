@@ -1,0 +1,134 @@
+<head>
+<div class="topnav">
+  <a href="/map.html">Map Explorer</a>
+  <a class="active" href="/box.html">Regional Variance</a>
+  <a href="/bubblefeature.html">Happiness Indicators</a>
+  <a href="/barchart.html">Happiness Indicators by Region</a>
+  <a href="/featuretrend.html">Feature Trend</a>
+  <a href="/interaction.html">Happiness Interactions</a>
+  <a href="/comparison.html">Countrywise Comparisons</a>
+</div>
+<header>
+    <h1><center>Happiness Variation By Region</center></h1>
+    </header></div>
+<style type="text/css">
+    /* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+<!-- Plotly.js -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        </head>
+        <body>
+        <!-- Plotly chart will be drawn inside this DIV -->
+        <div id="myDiv"></div>
+        <script>
+        var xData = ['Australia & New Zealand', 'Central & Eastern Europe',
+      'Eastern Asia', 'Latin America & Caribbean',
+      'Middle East & Northern Africa', 'North America',
+      'Southeastern Asia', 'Southern Asia',
+      'Sub-Saharan Africa', 'Western Europe'];
+
+// function getrandom(num , mul) 
+// {
+//    var value = [ ]  
+//     for(i=0;i<=num;i++)
+//    {
+//      rand=Math.random() * mul;
+//     value.push(rand);
+//     }
+//     console.log(value)
+//     return value
+// }
+var yData = [
+    [7.324, 7.272],
+    [6.711, 6.173, 6.123, 6.096, 5.810, 5.952, 5.933, 5.640, 5.945, 5.636, 5.790, 5.948, 5.739, 5.483, 5.398, 5.620, 5.321, 5.662, 5.662, 5.347, 5.201, 5.129, 5.185, 5.352, 5.131, 4.933, 4.586, 4.321, 4.340, 4.103, 4.000, 4.000],
+    [6.441, 5.915, 5.875, 5.430, 5.246, 5.125],
+    [7.072, 6.476, 6.419, 6.388, 6.488, 6.379, 6.382, 6.430, 6.260, 6.141, 5.973, 6.167, 5.752, 5.663, 5.681, 5.890, 4.806, 5.302, 5.504, 3.582],
+    [7.190, 6.774, 6.374, 6.371, 6.083, 6.105, 5.295, 5.566, 5.483, 5.161, 5.254, 5.199, 4.592, 4.419, 4.707, 4.456, 3.355, 3.462] ,
+    [7.072, 6.476, 6.419, 6.388, 6.488, 6.379, 6.382, 6.43, 6.26, 6.141, 5.973, 6.167, 5.752, 5.663, 5.681, 5.89, 4.806, 5.302, 5.504, 3.582],
+    [6.343, 6.072, 6.322, 5.524, 5.093, 5.103, 4.623, 4.433],
+    [5.472, 5.082, 4.88, 4.5, 4.471, 4.19, 3.632],
+    [5.891, 5.155, 4.724, 4.571, 4.975, 4.41, 4.417, 4.631, 4.377, 4.758, 4.35, 4.356, 4.447, 4.139, 4.657, 4.161, 4.424, 4.166, 3.587, 4.301, 3.692, 3.808, 3.795, 3.59, 4.141, 3.774, 3.495, 3.964, 3.999, 3.408, 3.303, 3.083],
+    [7.594, 7.555, 7.495, 7.487, 7.632, 7.441, 7.314, 7.139, 6.977, 6.965, 6.927, 6.91, 6.814, 6.627, 6.489, 6.31, 6, 5.762, 5.358, 5.41]
+];
+
+var colors = ['rgba(93, 164, 214, 0.5)', 'rgba(255, 144, 14, 0.5)', 'rgba(44, 160, 101, 0.5)', 'rgba(255, 65, 54, 0.5)', 'rgba(207, 114, 255, 0.5)', 'rgba(127, 96, 0, 0.5)', 'rgba(255, 140, 184, 0.5)', 'rgba(79, 90, 117, 0.5)', 'rgba(222, 223, 0, 0.5)'];
+
+var data = [    ];
+
+for ( var i = 0; i < xData.length; i ++ ) {
+  var result = {
+    type: 'box',
+    y: yData[i],
+    name: xData[i],
+    boxpoints: 'all',
+    jitter: 0.5,
+    whiskerwidth: 0.2,
+    fillcolor: 'cls',
+    marker: {
+      size: 2
+    },
+    line: {
+      width: 1
+    }
+  };
+  data.push(result);
+};
+
+layout = {
+    //title: 'Happiness by Region',
+    yaxis: {
+        autorange: true,
+        showgrid: true,
+        zeroline: true,
+        dtick: 5,
+        gridcolor: '',
+        gridwidth: 1,
+        zerolinecolor: 'black',
+        zerolinewidth: 2
+    },
+    xaxis:{
+        zeroline: true,
+        zerolinecolor: 'black', 
+        zerolinewidth: 2
+
+    },
+    margin: {
+        l: 50,
+        r: 130,
+        b: 100,
+        t: 100
+    },
+    paper_bgcolor: '',
+    plot_bgcolor: '',
+    showlegend: false
+};
+
+Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});
+        </script>
+        </body>
