@@ -10,75 +10,75 @@
   <a href="/Key_to_Happiness/comparison.html">Countrywise Comparisons</a>
 </div>
 <header>
-  <h1><center>Feature Trend</center></h1>
-  </header></div>
+    <h1><center>Feature Trend</center></h1>
+    </header></div>
 <style>
 /*set the axis line color, dot stroke, font size, and font position*/
 body {
-font: 15px sans-serif;
+  font: 15px sans-serif;
 }
 .topnav {
-background-color: #333;
-overflow: hidden;
+  background-color: #333;
+  overflow: hidden;
 }
 
 /* Style the links inside the navigation bar */
 .topnav a {
-float: left;
-color: #f2f2f2;
-text-align: center;
-padding: 14px 16px;
-text-decoration: none;
-font-size: 15.5px;
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 15.5px;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-background-color: #ddd;
-color: black;
+  background-color: #ddd;
+  color: black;
 }
 
 /* Add a color to the active/current link */
 .topnav a.active {
-background-color: #4CAF50;
-color: white;
+  background-color: #4CAF50;
+  color: white;
 }
 .name{
-position: relative;
-top: 90px;
-text-align: left;
-font-weight: bold;
+  position: relative;
+  top: 90px;
+  text-align: left;
+  font-weight: bold;
 }
 
 .title {
-position: relative;
-text-align: left;
-font-size: 25px;
+  position: relative;
+  text-align: left;
+  font-size: 25px;
 }
 
 .axis path,
 .axis line {
-fill: none;
-stroke: #000;
-shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .dot {
-stroke:  ;
+  stroke:  ;
 }
 
 #filter {
-position: absolute;
-top: 610px;
-bottom: 125px;
-left: 500px;
-right: 0px;
+  position: absolute;
+  top: 610px;
+  bottom: 125px;
+  left: 500px;
+  right: 0px;
 }
 
 
 #xAXs {
-position: absolute;
-top: 630px;
+  position: absolute;
+  top: 630px;
 bottom: 100px;
 left: 670px;
 right: 0px;
@@ -108,32 +108,32 @@ font-size: 13px;
 }
 
 .d3-tip {
-line-height: 1;
-font-weight: bold;
-padding: 12px;
-background: rgba(0, 0, 0, 0.9);
-color: rgb(240, 238, 235);
-border-radius: 2px;
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.9);
+  color: rgb(240, 238, 235);
+  border-radius: 2px;
 }
 
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
-box-sizing: border-box;
-display: inline;
-font-size: 10px;
-width: 100%;
-line-height: 1;
-color: rgba(0, 0, 0, 0.8);
-content: "\25BC";
-position: absolute;
-text-align: center;
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
 }
 
 /* Style northward tooltips differently */
 .d3-tip.n:after {
-margin: -1px 0 0 0;
-top: 100%;
-left: 0;
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
 }
 
 </style>
@@ -148,183 +148,181 @@ left: 0;
 <script>
 
 var margin = {top: 10, right: 25, bottom: 30, left: 200},
-  width = 1200 - margin.left - margin.right,
-  height = 460 - margin.top - margin.bottom;
-
-
+    width = 1200 - margin.left - margin.right,
+    height = 460 - margin.top - margin.bottom;
 var x = d3.scale.linear()
-  .range([0, width-80]);
+    .range([0, width-80]);
 
 var y = d3.scale.linear()
-  .range([height, 0]);
+    .range([height, 0]);
 
 
 var color = d3.scale.category10();
 
 var axisNames = { 
-                 
-                  happiness: 'Happiness Score', 
-                  Corruption: 'Corruption in Public Sector', 
-                  Energy: 'Energy Consumption Per Capita',
-                  Electricity: 'Electricity Coverage',
-                  Fertility: 'Fertility Rate',
-                  Life_Expectancy: 'Life Expectancy',
-                  Death_Food: 'Depth of Food Deficit',
-                  FreeHuman: 'Human Freedom Index',
-                  Obesity: 'Obesity Rate', 
-                  HRP: 'Human Right Protection',
-                  Internet: 'Internet Coverage'
-                 
-              };
+                   
+                    happiness: 'Happiness Score', 
+                    Corruption: 'Corruption in Public Sector', 
+                    Energy: 'Energy Consumption Per Capita',
+                    Electricity: 'Electricity Coverage',
+                    Fertility: 'Fertility Rate',
+                    Life_Expectancy: 'Life Expectancy',
+                    Death_Food: 'Depth of Food Deficit',
+                    FreeHuman: 'Human Freedom Index',
+                    Obesity: 'Obesity Rate', 
+                    HRP: 'Human Right Protection',
+                    Internet: 'Internet Coverage'
+                   
+                };
 
 var xAxis = d3.svg.axis()
-  .scale(x)
-  .orient("bottom");
+    .scale(x)
+    .orient("bottom");
 
 var yAxis = d3.svg.axis()
-  .scale(y)
-  .orient("left");
+    .scale(y)
+    .orient("left");
 
 var tip = d3.tip()
-.attr('class', 'd3-tip')
-.offset([-10, 0])
-.html(function(d) {
-  return "<strong>Country Name:</strong> <span style='color:red'>" + d.Country_Name + "</span>";
-})
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Country Name:</strong> <span style='color:red'>" + d.Country_Name + "</span>";
+  })
 
 var svg = d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.call(tip);
 
 d3.csv("Happiness_data_final.csv", function(error, data) {
-data.forEach(function(d) {
-  d.happiness = +d.happiness;
-  d.Corruption = +d.Corruption||0;
-  d.Energy = +d.Energy;
-  d.Life_Expectancy = +d.Life_Expectancy||0;
-  d.Death_Food = +d.Death_Food||0;
-  d.HRP = +d.HRP ;
-  d.Internet = +d.Internet; 
-  d.Obesity = +d.Obesity; 
-  d.FreeHuman = +d.FreeHuman; 
-});
+  data.forEach(function(d) {
+    d.happiness = +d.happiness;
+    d.Corruption = +d.Corruption||0;
+    d.Energy = +d.Energy;
+    d.Life_Expectancy = +d.Life_Expectancy||0;
+    d.Death_Food = +d.Death_Food||0;
+    d.HRP = +d.HRP ;
+    d.Internet = +d.Internet; 
+    d.Obesity = +d.Obesity; 
+    d.FreeHuman = +d.FreeHuman; 
+  });
 
-x.domain(d3.extent(data, function(d) { return d.Corruption; })).nice();
-y.domain(d3.extent(data, function(d) { return d.happiness; })).nice();
+  x.domain(d3.extent(data, function(d) { return d.Corruption; })).nice();
+  y.domain(d3.extent(data, function(d) { return d.happiness; })).nice();
 
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis)
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", width - 80)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("Corruption");
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
     .append("text")
-    .attr("class", "label")
-    .attr("x", width - 80)
-    .attr("y", -6)
-    .style("text-anchor", "end")
-    .text("Corruption");
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Happiness")
 
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-  .append("text")
-    .attr("class", "label")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Happiness")
-
-var circles = svg.selectAll(".dot")
-    .data(data)
-  .enter().append("circle")
-    .attr("class", "dot")
-    .attr("r", 5)
-    .attr("cx", function(d) { return x(d.Corruption); })
-    .attr("cy", function(d) { return y(d.happiness); })
-    .on('mouseover', tip.show)
-    .on('mouseout', tip.hide)
-    .style("fill", function(d) { return color(d.year); });
-    
-// svg.append("text")
-//  .attr('x', 350)
-//  .attr('y', -50)
-//  .text("Happiness and Feature Trend")
-//  .style("font-size", "24px")
-//  .style("text-decoration", "bold");
+ var circles = svg.selectAll(".dot")
+      .data(data)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("r", 5)
+      .attr("cx", function(d) { return x(d.Corruption); })
+      .attr("cy", function(d) { return y(d.happiness); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      .style("fill", function(d) { return color(d.year); });
+      
+  // svg.append("text")
+  //  .attr('x', 350)
+  //  .attr('y', -50)
+  //  .text("Happiness and Feature Trend")
+  //  .style("font-size", "24px")
+  //  .style("text-decoration", "bold");
 
 
-var legend = svg.selectAll(".legend")
-    .data(color.domain())
-    .enter().append("g")
-    .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+  var legend = svg.selectAll(".legend")
+      .data(color.domain())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
 
-legend.append("rect")
-    .attr("x", width - 10)
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", color);
+  legend.append("rect")
+      .attr("x", width - 10)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
 
 
-legend.append("text")
-    .attr("x", 960)
-    .attr("y", 9)
-    .attr("dy", ".35em")
-    .style("text-anchor", "end")
-    .text(function(d) { return d; });
+  legend.append("text")
+      .attr("x", 960)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
 
 
 
-d3.selectAll("[name=v]").on("change", function() {
-    var selected = this.value;
-    display = this.checked ? "inline" : "none";
+  d3.selectAll("[name=v]").on("change", function() {
+      var selected = this.value;
+      display = this.checked ? "inline" : "none";
 
 
-svg.selectAll(".dot")
-    .filter(function(d) {return selected == d.year;})
-    .attr("display", display);
+  svg.selectAll(".dot")
+      .filter(function(d) {return selected == d.year;})
+      .attr("display", display);
+      });
+
+
+
+  d3.selectAll("[name=year]").on("change", function(d) {
+     radius = this.value;
+
+     svg.selectAll(".dot")
+     console.log(radius);
+     circles.attr("r", function(d) { return d[radius]; });
+  });
+
+
+
+  d3.select("[name=xAX]").on("change", function(){
+    xAxy = this.value;
+    console.log(xAxy)
+    x.domain(d3.extent(data, function(d) { return d[xAxy]; })).nice();
+
+    svg.select(".x.axis").transition().call(xAxis);
+
+    svg.selectAll(".dot").transition().attr("cx", function(d) { 
+        return x(d[xAxy]);
     });
-
-
-
-d3.selectAll("[name=year]").on("change", function(d) {
-   radius = this.value;
-
-   svg.selectAll(".dot")
-   console.log(radius);
-   circles.attr("r", function(d) { return d[radius]; });
-});
-
-
-
-d3.select("[name=xAX]").on("change", function(){
-  xAxy = this.value;
-  console.log(xAxy)
-  x.domain(d3.extent(data, function(d) { return d[xAxy]; })).nice();
-
-  svg.select(".x.axis").transition().call(xAxis);
-
-  svg.selectAll(".dot").transition().attr("cx", function(d) { 
-      return x(d[xAxy]);
+    svg.selectAll(".x.axis").selectAll("text.label").text(axisNames[xAxy] );
   });
-  svg.selectAll(".x.axis").selectAll("text.label").text(axisNames[xAxy] );
-});
 
-d3.select("[name=yAX]").on("change", function(){
-  yAxy = this.value;
-  console.log(yAxy)
-  y.domain(d3.extent(data, function(d) { return d[yAxy]; })).nice();
-  svg.select(".y.axis").transition().call(yAxis);
-  svg.selectAll(".dot").transition().attr("cy", function(d) { 
-      return y(d[yAxy]);
+  d3.select("[name=yAX]").on("change", function(){
+    yAxy = this.value;
+    console.log(yAxy)
+    y.domain(d3.extent(data, function(d) { return d[yAxy]; })).nice();
+    svg.select(".y.axis").transition().call(yAxis);
+    svg.selectAll(".dot").transition().attr("cy", function(d) { 
+        return y(d[yAxy]);
+    });
+    svg.selectAll(".y.axis").selectAll("text.label").text(axisNames[yAxy] );
   });
-  svg.selectAll(".y.axis").selectAll("text.label").text(axisNames[yAxy] );
-});
 
 });
 
@@ -333,44 +331,42 @@ d3.select("[name=yAX]").on("change", function(){
 <br><br>
 
 
-<div id="filter">
-  <b>Year</b>
-      <br>
-  <input name='v' value="2018" type="checkbox" checked>2018
-  </input>
-  <br>
-  <input name='v' value=2017 type="checkbox" checked>2017
-  </input>
-  <br>
-  <input name='v' value=2016 type="checkbox" checked>2016
-  </input>
-  <br>
-  <input name='v' value=2015 type="checkbox" checked>2015
-  </input>
+  <div id="filter">
+    <b>Year</b>
+        <br>
+    <input name='v' value="2018" type="checkbox" checked>2018
+    </input>
+    <br>
+    <input name='v' value=2017 type="checkbox" checked>2017
+    </input>
+    <br>
+    <input name='v' value=2016 type="checkbox" checked>2016
+    </input>
+    <br>
+    <input name='v' value=2015 type="checkbox" checked>2015
+    </input>
+    
+  </div>
+
   
-</div>
-
-
 <div id="label"><b>X Axis</b></div>
-<select name="xAX" id="xAXs">
-      <option value ="Corruption">Corruption (for public sector)</option>
-      <option value ="Electricity">Electricity Coverage</option>
-      <option value ="Energy">Energy Consumption Per Capita</option>
-      <option value ="Fertility">Fertility Rate</option>
-      <option value ="Life_Expectancy">Life Expectancy</option>
-      <option value ="Death_Food">Depth of Food Deficit</option>
-      <option value ="FreeHuman">Human Freedom Index</option>
-      <option value ="Obesity">Obesity Rate</option>
-      <option value ="HRP">Human Right Protection</option>
-      <option value ="Internet">Internet Coverage</option>
-</select>
+  <select name="xAX" id="xAXs">
+        <option value ="Corruption">Corruption (for public sector)</option>
+        <option value ="Electricity">Electricity Coverage</option>
+        <option value ="Energy">Energy Consumption Per Capita</option>
+        <option value ="Fertility">Fertility Rate</option>
+        <option value ="Life_Expectancy">Life Expectancy</option>
+        <option value ="Death_Food">Depth of Food Deficit</option>
+        <option value ="FreeHuman">Human Freedom Index</option>
+        <option value ="Obesity">Obesity Rate</option>
+        <option value ="HRP">Human Right Protection</option>
+        <option value ="Internet">Internet Coverage</option>
+  </select>
 
-<div id="tan"><b>Note: Data points on Y axis correspond to missing values </b></div>
-
-</select>
-
-
-<br>
-</body>
+  <div id="tan"><b>Note: Data points on Y axis correspond to missing values </b></div>
+  
+  </select>
 
   
+  <br>
+</body>
