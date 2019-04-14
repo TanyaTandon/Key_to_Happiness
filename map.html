@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<div class="topnav">
+  <a class="active" href="/Key_to_Happiness/.html">Map Explorer</a>
+  <a href="/Key_to_Happiness/box.html">Regional Variance</a>
+  <a href="/Key_to_Happiness/bubblefeature.html">Happiness Indicators</a> 
+  <a href="/Key_to_Happiness/barchart.html">Happiness Indicators by Region</a>
+  <a href="/Key_to_Happiness/featuretrend.html">Feature Trend</a>
+  <a href="/Key_to_Happiness/interaction.html">Happiness Interactions</a>
+  <a href="/Key_to_Happiness/comparison.html">Countrywise Comparisons</a>
+</div>
+<head></head>
+<style>
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+h1 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+}
+
+h2 {
+  text-align: left;
+  margin-left: 165;
+  margin-bottom: -10;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
+  color: gray;
+}
+
+#explanation {
+  font-size: 12px;
+  font-family: "Open Sans", sans-serif;
+  max-width: 620px;
+  margin: -30 auto;
+  padding-top: 0px;
+  color: gray;
+  font-weight: 400;
+}
+  
+.bar--positive {
+  fill: #29a329;
+}
+
+.bar--negative {
+  fill: #666699;
+}
+
+.bar:hover {
+  fill: #e1ef1f;
+  fill-opacity: .8;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: none;
+  shape-rendering: crispEdges;
+}
+
+text {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: black;
+}
+  
+  .d3-tip {
+  line-height: 1;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 12px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+  .names {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+  }
+  
+  /* Tooltip CSS */
+  .d3-tip {
+    line-height: 1.5;
+    font-weight: 400;
+    font-family:"avenir next", Arial, sans-serif;
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #FFA500;
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip:after {      
+    box-sizing: border-box;
+    display: inline;
+    font-size: 8px;
+    width: 100%;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    pointer-events: none;
+    
+  }
+
+  /* Northward tooltips */
+  .d3-tip.n:after {
+    content: "\25BC";
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+    text-align: center;
+  }
+
+  /* Eastward tooltips */
+  .d3-tip.e:after {
+    content: "\25C0";
+    margin: -4px 0 0 0;
+    top: 50%;
+    left: -8px;
+  }
+
+  /* Southward tooltips */
+  .d3-tip.s:after {
+    content: "\25B2";
+    margin: 0 0 1px 0;
+    top: -8px;
+    left: 0;
+    text-align: center;
+  }
+
+  /* Westward tooltips */
+  .d3-tip.w:after {
+    content: "\25B6";
+    margin: -4px 0 0 -1px;
+    top: 50%;
+    left: 100%;
+  }
+
+  /*    
+  text{
+    pointer-events:none;
+  }
+  */
+
+  .details{
+    color: white;
+  }
+</style>
+
+<body>
+<script src="//d3js.org/d3.v4.min.js"></script>
+<script src="//d3js.org/queue.v1.min.js"></script>
+<script src="/d3js.org/topojson.v1.min.js"></script>
+<script src="//d3js.org/d3-geo-projection.v1.min.js"></script>
+<script src="d3-tip.js"></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js'></script>
+<script lang='babel' type='text/babel'>
+
+
+
+const format = d3.format(',');
+
+// Set tooltips
+const tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  //.html(d => `<strong>Country: </strong><span class='details'>${d.properties.name}<br></span> <strong>Happiness Ranking: </strong><span class='details'>${format(d.Ranking)}<br></span> `); //<strong>Happiness Index: </strong><span class='details'>${d.happinessScore}<br></span>
+  .html(d => `<strong>Country: </strong><span class='details'>${d.properties.name}<br></span><strong>Happiness Ranking: </strong><span class='details'>${format(d.population)}<br></span><strong>Happiness Score: </strong><span class='details'>${format(d.happinessScore)}</span>`);
+
+const margin = {top: -40, right: 0, bottom: 0, left: 0};
+const width = 1460 - margin.left - margin.right;
+const height = 750 - margin.top - margin.bottom;
+
+const color = d3.scaleThreshold()
+  .domain([
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ])
+  .range([
+'#3d3d5c',
+'#666699',
+'#a3a3c2',
+'#ebfaeb',
+'#99e699',
+'#17d147',
+'#29a329',
+'#000000'
+  ]);
+
+  var color_domain = [2,3,4,5,6,7,8]
+  var ext_color_domain = [2,3,4,5,6,7,8]
+  var legend_labels = ["2-3", "3-4", "4-5", "5-6","6-7","7-8", "N/A"]              
+  // var color = d3.scale.threshold()
+  // .domain(color_domain)
+  // .range(["#adfcad", "#ffcb40", "#ffba00", "#ff7d73", "#ff4e40", //"#ff1300"]);
+
+const svg = d3.select('body')
+  .append('svg')
+  .attr('width', width)
+  .attr('height', height)
+  .append('g')
+  .attr('class', 'map');
+
+const projection = d3.geoRobinson()
+  .scale(148)
+  .rotate([352, 0, 0])
+  .translate( [width / 2, height / 2]);
+
+const path = d3.geoPath().projection(projection);
+
+svg.call(tip);
+
+queue()
+  .defer(d3.json, 'world_countries.json')
+  .defer(d3.tsv, 'happy1.tsv')
+  .await(ready);
+
+
+
+function ready(error, data, population) {
+  const populationById = {};
+  const happyById = {};
+
+console.log(population);  
+  
+  population.forEach(d => { populationById[d.id] = +d.Ranking; });
+  data.features.forEach(d => { d.population = populationById[d.id] });
+
+  population.forEach(d => { happyById[d.id] = +d.happinessScore; });
+  data.features.forEach(d => { d.happinessScore = happyById[d.id] });
+
+    //
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 170)
+  .text("Top 5 Happy Countries:")
+  .style("font-weight", "bold")
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 190)
+  .text("1. Finland: 7.63").style("fill", "#29a329")
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 210)
+  .text("2. Norway: 7.59")
+  .style("font-color", "#29a329").style("fill", "#29a329") 
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 230)
+  .text("3. Denmark: 7.56")
+  .style("font-color", "#29a329").style("fill", "#29a329") 
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 250)
+  .text("4. Iceland: 7.50")
+  .style("font-color", "#29a329").style("fill", "#29a329") 
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 270)
+  .text("5. Switzerland: 7.49")
+  .style("font-color", "#29a329").style("fill", "#29a329") 
+
+
+  
+
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 300)
+  .text("Bottom 5 Happy Countries:")
+  .style("font-weight", "bold")  
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 320)
+  .text("1. Central African Republic: 3.083").style("fill", "#666699")
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 340)
+  .text("2. South Sudan: 3.254").style("fill", "#666699")
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 360)
+  .text("3. Tanzania: 3.303").style("fill", "#666699")
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 380)
+  .text("4. Yemen: 3.355").style("fill", "#666699")
+svg.append("text")
+  .attr("x", 30)             
+  .attr("y", 400)
+  .text("5. Rwanda: 3.408").style("fill", "#666699")
+
+
+    //Adding legend for our Choropleth
+
+  var legend = svg.selectAll("g.legend")
+  .data(ext_color_domain)
+  .enter().append("g")
+  .attr("class", "legend");
+
+  var ls_w = 20, ls_h = 20;
+
+  legend.append("rect")
+  .attr("x", 60)
+  .attr("y", function(d, i){ return height - (i*ls_h) - 10*ls_h;})
+  .attr("width", ls_w)
+  .attr("height", ls_h)
+  .style("fill", function(d, i) { return color(d); })
+  .style("opacity", 0.8);
+
+  legend.append("text")
+  .attr("x", 35)
+  .attr("y", function(d, i){ return height - (i*ls_h) - 9*ls_h-2;})
+  .text(function(d, i){ return legend_labels[i]; });
+
+
+  legend.append("text")
+  .attr("x", 30)
+  .attr("y", 450)
+  .text("Happiness Score");
+
+
+svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top ))
+        .attr("text-anchor", "middle")    
+        .style("font-size", "32px") 
+        .style("font-weight", "bold")  
+        .text("Welcome to our World Happiness Map Explorer!");
+    
+  svg.append('g')
+    .attr('class', 'countries')
+    .selectAll('path')
+    .data(data.features)
+    .enter().append('path')
+      .attr('d', path)
+      .style('fill', d => color(happyById[d.id]))
+      .style('stroke', 'white')
+      .style('opacity', 0.8)
+      .style('stroke-width', 0.3)
+      // tooltips
+      .on('mouseover',function(d){
+        tip.show(d);
+        d3.select(this)
+          .style('opacity', 1)
+          .style('stroke-width', 3);
+      })
+      .on('mouseout', function(d){
+        tip.hide(d);
+        d3.select(this)
+          .style('opacity', 0.8)
+          .style('stroke-width',0.3);
+      });
+
+  svg.append('path')
+    .datum(topojson.mesh(data.features, (a, b) => a.id !== b.id))
+    .attr('class', 'names')
+    .attr('d', path);
+}
+</script>
+
+</body>
+
+
+</html>
+
